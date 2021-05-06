@@ -13,7 +13,7 @@ case class Employee(card: Card,
 object Employee {
 
   implicit val reads: Reads[Employee] =
-    (__.read[Card] and
+      (__.read[Card] and
       (__ \ "name").read[String] and
       (__ \ "email").read[String] and
       (__ \ "mobileNo").read[String] and
@@ -21,8 +21,9 @@ object Employee {
       (__ \ "balance").read[Int]
     )(Employee.apply _)
 
+
   implicit val writes: OWrites[Employee] =
-    (__.write[Card] and
+      (__.write[Card] and
       (__ \ "name").write[String] and
       (__ \ "email").write[String] and
       (__ \ "mobileNo").write[String] and

@@ -48,8 +48,6 @@ class EmployeeSpec extends WordSpec with MustMatchers {
         "securityPin" -> 1111,
         "balance" -> 60
       )
-      println(s" THIS IS THE EXPECTED DATA RETURN >>> $expectedJson")
-      println(s"THIS IS THE DATA THAT WAS RETURNED >>> ${Json.toJson(employee)}")
       Json.toJson(employee) mustBe expectedJson
     }
   }
