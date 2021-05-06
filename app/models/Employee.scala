@@ -1,5 +1,32 @@
 package models
 
-class Employee {
+import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
+import play.api.libs.json.{Reads, OWrites, __}
 
+case class Employee(card: Card,
+                    name: String,
+                    email: String,
+                    mobileNo: String,
+                    securityPin: Int,
+                    balance: Int)
+
+object Employee {
+
+  implicit val reads: Reads[Employee] =
+    (__.read[Card] and
+      (__ \ "name").read[String] and
+      (__ \ "email").read[String] and
+      (__ \ "mobileNo").read[String] and
+      (__ \ "securityPin").read[Int] and
+      (__ \ "balance").read[Int]
+    )(Employee.apply _)
+
+  implicit val writes: OWrites[Employee] =
+    (__.write[Card] and
+      (__ \ "name").write[String] and
+      (__ \ "email").write[String] and
+      (__ \ "mobileNo").write[String] and
+      (__ \ "securityPin").write[Int] and
+      (__ \ "balance").write[Int]
+    ) (unlift(Employee.unapply))
 }

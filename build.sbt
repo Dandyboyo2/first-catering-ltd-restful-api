@@ -9,9 +9,5 @@ scalaVersion := "2.13.5"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
-
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "com.example.controllers._"
-
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "com.example.binders._"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.2" % Test
+libraryDependencies += "org.mockito" % "mockito-all" % "1.10.19" % Test
