@@ -53,8 +53,6 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
       result =>
         val selector:    JsObject = Json.obj("employee" -> card.cardID)
         val topUp: JsObject = Json.obj("£topUp" -> Json.obj("balance" -> topUpAmount))
-       println(s" >>>>>>> $topUp <<<<<<<<")
-       println(s" >>>>>> $selector<<<<<<")
         findAndUpdate(result, selector, topUp).map(_.result[Employee])
     }
   }
