@@ -11,4 +11,6 @@ class EmployeeController @Inject()(cc: ControllerComponents,
                                    employeeSessionRepository: EmployeeSessionRepository)
                                 (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
+
+  //TODO Add securityPin functionality to controller & repo?
 }
