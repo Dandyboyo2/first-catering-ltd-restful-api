@@ -5,7 +5,7 @@ import play.api.libs.json.Json
 
 class EmployeeSpec extends WordSpec with MustMatchers {
 
-  val employeeCardExample: Card = Card("QWerty1234567890")
+  val employeeIDExample: Card = Card("QWerty1234567890")
 
   "Employee model" must {
 
@@ -20,7 +20,7 @@ class EmployeeSpec extends WordSpec with MustMatchers {
       )
 
       val expectedEmployee = Employee(
-        card = employeeCardExample,
+        employeeID = employeeIDExample,
         name = "EmployeeTestName",
         email = "EmployeeTestEmail@email.co.uk",
         mobileNo = "0987654321",
@@ -32,7 +32,7 @@ class EmployeeSpec extends WordSpec with MustMatchers {
 
     "Serialize correctly" in {
       val employee = Employee(
-        card = employeeCardExample,
+        employeeID = employeeIDExample,
         name = "EmployeeTestName",
         email = "EmployeeTestEmail@email.co.uk",
         mobileNo = "0987654321",
