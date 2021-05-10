@@ -28,7 +28,7 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
     ).one[Employee])
   }
 
-  def registerEmployee(newEmployee:Employee): Future[WriteResult] = {
+  def registerEmployee(newEmployee: Employee): Future[WriteResult] = {
     employeeCollection.flatMap(_.insert.one(newEmployee))
   }
 
@@ -58,7 +58,7 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
     }
   }
 
-  def accountTransactions(card: Card, costOfGoods: Int): Future[Option[Employee]] = {
+  def accountTransaction(card: Card, costOfGoods: Int): Future[Option[Employee]] = {
     employeeCollection.flatMap {
       result =>
         val selector: JsObject = Json.obj("_id" -> card.cardID)
