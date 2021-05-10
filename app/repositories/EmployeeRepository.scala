@@ -48,15 +48,22 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
       arrayFilters = Seq.empty
     )
   }
-  //TODO refactor ""
+
   def topUpBalance(card: Card, topUpAmount: Int): Future[Option[Employee]] = {
     employeeCollection.flatMap {
       result =>
         val selector:    JsObject = Json.obj("employee" -> card.cardID)
-        val topUp: JsObject = Json.obj("£increase" -> Json.obj("balance" -> topUpAmount))
+        val topUp: JsObject = Json.obj("$inc" -> Json.obj("balance" -> topUpAmount))
         findAndUpdate(result, selector, topUp).map(_.result[Employee])
     }
   }
 
-  def topUpTransactions() = ???
+  def accountTransactions(card: Card, costOfGoods: Int): Future[Option[Employee]] = {
+    employeeCollection.flatMap {
+      result =>
+        val selector: JsObject = Json.obj("_id" -> card.cardID)
+        val modifier: JsObject = Json.obj("$inc" -> Json.obj("funds" -> -costOfGoods))
+        findAndUpdate(result, selector, modifier).map(_.result[Employee])
+    }
+  }
 }
