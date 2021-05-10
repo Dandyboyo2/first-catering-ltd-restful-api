@@ -1,11 +1,12 @@
 package models
 
+import mongoDateTimeFormat.MongoDateTimeFormat
 import org.scalatest.{FreeSpec, MustMatchers}
 import play.api.libs.json.Json
 
 import java.time.LocalDateTime
 
-class EmployeeSessionSpec extends FreeSpec with MustMatchers {
+class EmployeeSessionSpec extends FreeSpec with MustMatchers with MongoDateTimeFormat {
 
   "EmployeeSession model" - {
     val employeeSessionID = "QWerty1234567890"
