@@ -7,8 +7,8 @@ case class Employee(employeeID: Card,
                     name: String,
                     email: String,
                     mobileNo: String,
-                    securityPin: Int,
-                    balance: Int)
+                    balance: Int,
+                    securityPin: Int)
 
 object Employee {
 
@@ -17,8 +17,8 @@ object Employee {
       (__ \ "name").read[String] and
       (__ \ "email").read[String] and
       (__ \ "mobileNo").read[String] and
-      (__ \ "securityPin").read[Int] and
-      (__ \ "balance").read[Int]
+      (__ \ "balance").read[Int] and
+      (__ \ "securityPin").read[Int]
     )(Employee.apply _)
 
 
@@ -27,7 +27,7 @@ object Employee {
       (__ \ "name").write[String] and
       (__ \ "email").write[String] and
       (__ \ "mobileNo").write[String] and
-      (__ \ "securityPin").write[Int] and
-      (__ \ "balance").write[Int]
+      (__ \ "balance").write[Int] and
+      (__ \ "securityPin").write[Int]
     ) (unlift(Employee.unapply))
 }

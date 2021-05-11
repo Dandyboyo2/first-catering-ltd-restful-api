@@ -62,7 +62,7 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
     employeeCollection.flatMap {
       result =>
         val selector: JsObject = Json.obj("_id" -> card.cardID)
-        val modifier: JsObject = Json.obj("$inc" -> Json.obj("funds" -> -costOfGoods))
+        val modifier: JsObject = Json.obj("$inc" -> Json.obj("balance" -> -costOfGoods))
         findAndUpdate(result, selector, modifier).map(_.result[Employee])
     }
   }

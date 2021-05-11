@@ -10,9 +10,9 @@ class CardSpec extends WordSpec with MustMatchers {
 
   "Card model" must {
 
-    "return 'Invalid Card ID.' if card ID does not match ID format" in {
+    "return 'Invalid CardID.' if cardID does not match ID format" in {
       val invalidCardID = "623Wc"
-      val testResult = "Invalid Card ID."
+      val testResult = "Invalid CardID."
 
       pathBindable.bind("", invalidCardID) mustBe Left(testResult)
     }

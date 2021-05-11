@@ -13,7 +13,7 @@ object Card {
   implicit val pathBindable: PathBindable[Card] = {
     new PathBindable[Card] {
       override def bind(key: String, value: String): Either[String, Card] =
-        if (value.matches("^[a-zA-Z0-9]{16}$")) Right(Card(value)) else Left("Invalid Card ID.")
+        if (value.matches("^[a-zA-Z0-9]{16}$")) Right(Card(value)) else Left("Invalid CardID.")
 
       override def unbind(key: String, value: Card): String = value.cardID
     }

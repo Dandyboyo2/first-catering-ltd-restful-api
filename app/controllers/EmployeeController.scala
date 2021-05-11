@@ -29,7 +29,7 @@ class EmployeeController @Inject()(cc: ControllerComponents,
 //      }
 //  }
 
-  def presentCard(card: Card): Action[AnyContent] = Action.async {
+  def insertCard(card: Card): Action[AnyContent] = Action.async {
 
     implicit request =>
       employeeRepository.findEmployeeByID(card).flatMap {
@@ -41,7 +41,7 @@ class EmployeeController @Inject()(cc: ControllerComponents,
              employeeSessionRepository.createEmployeeSessionByID(EmployeeSession(card.cardID, LocalDateTime.now))
                 .map(_ => Ok(s"Welcome ${employee.name}."))
           }
-        case None => Future.successful(BadRequest("Your card is not registered on the system, please proceed to registering your card. "))
+        case None => Future.successful(BadRequest("Your cardID is not registered on the system. Please proceed to registering your card."))
       } recoverWith {
         case _: JsResultException =>
           Future.successful(BadRequest("Incorrect data - unable to parse Json data to the Employee model."))
@@ -67,10 +67,10 @@ class EmployeeController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def findEmployeeById(card: Card): Action[AnyContent] = Action.async {
+  def findEmployeeByID(card: Card): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
       employeeRepository.findEmployeeByID(card).map {
-        case None => NotFound("An employee could not be found with that cardID.")
+        case None => NotFound("An Employee could not be found with that cardID.")
         case Some(employee) => Ok(Json.toJson(employee))
       } recoverWith {
         case _: JsResultException =>
@@ -101,10 +101,10 @@ class EmployeeController @Inject()(cc: ControllerComponents,
           case _ =>
             employeeRepository.findEmployeeByID(card).flatMap {
               case Some(_) => employeeRepository.topUpBalance(card, topUpAmount)
-                .map { _ => Ok(s"Top up successful, $topUpAmount has been added to your balance.")}
+                .map { _ => Ok(s"Top up successful, £$topUpAmount has been added to your account balance.")}
             }
         }
-      case None => Future.successful(NotFound("An employee could not be found with that cardID."))
+      case None => Future.successful(NotFound("An Employee could not be found with that cardID."))
     } recoverWith {
       case _: JsResultException => Future.successful(BadRequest("Incorrect data - unable to parse Json data to the Employee model."))
       case e => Future.successful(BadRequest(s"An issue has occurred resulting in the following exception: $e."))

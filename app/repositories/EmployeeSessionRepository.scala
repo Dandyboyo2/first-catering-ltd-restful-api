@@ -15,12 +15,12 @@ import reactivemongo.play.json.collection.JSONCollection
 import javax.inject.Inject
 
 case class EmployeeSessionRepository @Inject()(mongo: ReactiveMongoApi, config: Configuration,
-                                          memberRepository: EmployeeRepository)(implicit ec: ExecutionContext) {
+                                               employeeRepository: EmployeeRepository)(implicit ec: ExecutionContext) {
 
   private val employeeSessionCollection: Future[JSONCollection] =
     mongo.database.map(_.collection[JSONCollection]("EmployeeSession"))
 
-  val inactivityTimeOut: Int = config.get[Int]("session.InactivityTimeOut")
+  val inactivityTimeOut: Int = config.get[Int]("session.inactivityTimeOut")
 
   private val index: Index = Index(
     key = Seq("lastUpdated" -> IndexType.Ascending),

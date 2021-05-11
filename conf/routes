@@ -5,14 +5,14 @@
 
 # Map static resources from the /public folder to the /assets URL path
 
-GET   /insertCard/:card                       controllers.MemberController.insertCard(card: Card)
+GET   /insertCard/:card                       controllers.EmployeeController.insertCard(card: Card)
 
-GET   /findMember/:card                       controllers.MemberController.insert
+GET   /findEmployee/:card                       controllers.EmployeeController.findEmployeeByID(card: Card)
 
-POST  /registerMember                         controllers.MemberController.registerMember
+POST  /registerEmployee                         controllers.EmployeeController.registerEmployee
 
-GET   /checkBalance/:card                     controllers.MemberController.checkFunds(card:Card)
+GET   /checkBalance/:card                     controllers.EmployeeController.checkBalance(card:Card)
 
-POST  /topUpBalance/:card/:balance            controllers.MemberController.addFunds(card:Card, balance:Int)
+POST  /topUpBalance/:card/:balance            controllers.EmployeeController.topUpBalance(card:Card, balance:Int)
 
-POST  /transaction/:card/:costOfGoods         controllers.MemberController.transaction(card:Card, costOfGoods:Int)
+POST  /accountTransaction/:card/:costOfGoods         controllers.EmployeeController.accountTransaction(card:Card, costOfGoods:Int)
