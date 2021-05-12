@@ -18,18 +18,7 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
                                   (implicit ec: ExecutionContext) extends AbstractController(cc) {
 
   private val employeeCollection: Future[JSONCollection] = {
-    mongo.database.map(_.collection[JSONCollection]("Employees"))
-  }
-
-  def findEmployeeByID(cardID: Card): Future[Option[Employee]] = {
-    employeeCollection.flatMap(_.find(
-      Json.obj("employeeID" -> cardID.cardID),
-      None
-    ).one[Employee])
-  }
-
-  def registerEmployee(newEmployee: Employee): Future[WriteResult] = {
-    employeeCollection.flatMap(_.insert.one(newEmployee))
+    mongo.database.map(_.collection[JSONCollection]("employees"))
   }
 
   def findAndUpdate(collection: JSONCollection, selection: JsObject,
@@ -49,19 +38,30 @@ case class EmployeeRepository @Inject()(cc: ControllerComponents,
     )
   }
 
-  def topUpBalance(card: Card, topUpAmount: Int): Future[Option[Employee]] = {
+  def findEmployeeByID(IDsearch: Card): Future[Option[Employee]] = {
+    employeeCollection.flatMap(_.find(
+      Json.obj("cardID" -> IDsearch.cardID),
+      None
+    ).one[Employee])
+  }
+
+  def registerEmployee(newEmployee: Employee): Future[WriteResult] = {
+    employeeCollection.flatMap(_.insert.one(newEmployee))
+  }
+
+  def topUpBalance(cardID: Card, topUpAmount: Int): Future[Option[Employee]] = {
     employeeCollection.flatMap {
       result =>
-        val selector:    JsObject = Json.obj("employee" -> card.cardID)
+        val selector:    JsObject = Json.obj("cardID" -> cardID.cardID)
         val topUp: JsObject = Json.obj("$inc" -> Json.obj("balance" -> topUpAmount))
         findAndUpdate(result, selector, topUp).map(_.result[Employee])
     }
   }
 
-  def accountTransaction(card: Card, costOfGoods: Int): Future[Option[Employee]] = {
+  def accountTransaction(cardID: Card, costOfGoods: Int): Future[Option[Employee]] = {
     employeeCollection.flatMap {
       result =>
-        val selector: JsObject = Json.obj("_id" -> card.cardID)
+        val selector: JsObject = Json.obj("cardID" -> cardID.cardID)
         val modifier: JsObject = Json.obj("$inc" -> Json.obj("balance" -> -costOfGoods))
         findAndUpdate(result, selector, modifier).map(_.result[Employee])
     }

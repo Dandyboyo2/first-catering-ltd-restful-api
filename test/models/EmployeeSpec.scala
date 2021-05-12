@@ -20,7 +20,7 @@ class EmployeeSpec extends WordSpec with MustMatchers {
       )
 
       val expectedEmployee = Employee(
-        employeeID = employeeIDExample,
+        cardID = employeeIDExample,
         name = "EmployeeTestName",
         email = "EmployeeTestEmail@email.co.uk",
         mobileNo = "0987654321",
@@ -32,7 +32,7 @@ class EmployeeSpec extends WordSpec with MustMatchers {
 
     "Serialize correctly" in {
       val employee = Employee(
-        employeeID = employeeIDExample,
+        cardID = employeeIDExample,
         name = "EmployeeTestName",
         email = "EmployeeTestEmail@email.co.uk",
         mobileNo = "0987654321",

@@ -132,7 +132,7 @@ class EmployeeControllerSpec extends WordSpec with MustMatchers
   "findEmployeebyID" must {
     "return an OK response and the Employee details" in {
       when(mockEmployeeRespository.findEmployeeByID(any()))
-        .thenReturn(Future.successful(Some(Employee(cardID, "testName", "testEmail", "testMobileNo", 200, 1234))))
+        .thenReturn(Future.successful(Some(Employee(cardID, "testName", "testEmail", "testMobileNo", 60, 1111))))
       val app: Application = builder.build()
 
       val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest(GET, routes.EmployeeController.findEmployeeByID(Card("QWerty1234567890")).url)
@@ -141,7 +141,7 @@ class EmployeeControllerSpec extends WordSpec with MustMatchers
 
       status(result) mustBe OK
       contentAsString(result) must contain
-      """{"_id":cardID,"name":testName,"email":"testEmail","mobileNumber":"testMobileNo","balance":200,"securityPin":1234}""".stripMargin
+      """{"cardID":cardID,"name":testName,"email":"testEmail","mobileNumber":"testMobileNo","balance":200,"securityPin":1234}""".stripMargin
 
       app.stop
     }
@@ -199,7 +199,7 @@ class EmployeeControllerSpec extends WordSpec with MustMatchers
       when(mockEmployeeRespository.registerEmployee(any()))
         .thenReturn(Future.successful(UpdateWriteResult.apply(ok = true, 1, 1, Seq.empty, Seq.empty, None, None, None)))
 
-      val EmployeeJson: JsValue = Json.toJson(Employee(cardID, "testName", "testEmail", "testMobileNo", 200, 1234))
+      val EmployeeJson: JsValue = Json.toJson(Employee(cardID, "testName", "testEmail", "testMobileNo", 60, 1111))
 
       val app: Application = builder.build()
 
@@ -239,7 +239,7 @@ class EmployeeControllerSpec extends WordSpec with MustMatchers
           override def message: String = "Duplicate key - unable to parse Json to the Employee model."
         }))
 
-      val EmployeeJson: JsValue = Json.toJson(Employee(cardID, "testName", "testEmail", "testMobileNo", 200, 1234))
+      val EmployeeJson: JsValue = Json.toJson(Employee(cardID, "testName", "testEmail", "testMobileNo", 60, 1111))
 
       val app: Application = builder.build()
 
@@ -304,7 +304,7 @@ class EmployeeControllerSpec extends WordSpec with MustMatchers
       val result: Future[Result] = route(app, request).value
 
       status(result) mustBe OK
-      contentAsString(result) mustBe "60"
+      contentAsString(result) mustBe "\"Your balance is £60.00.\""
 
       app.stop
     }

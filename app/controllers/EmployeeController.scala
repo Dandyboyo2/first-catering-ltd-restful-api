@@ -18,7 +18,7 @@ class EmployeeController @Inject()(cc: ControllerComponents,
 
   //TODO Add securityPin functionality to controller & repo?
 
-//  def validatePin(card: Card, suppliedPin: Int): Action[AnyContent] = Action.async {
+//  def validatePin(cardID: Card, suppliedPin: Int): Action[AnyContent] = Action.async {
 //    case Some(validPin) => {
 //      suppliedPin match {
 //        
@@ -29,16 +29,16 @@ class EmployeeController @Inject()(cc: ControllerComponents,
 //      }
 //  }
 
-  def insertCard(card: Card): Action[AnyContent] = Action.async {
+  def insertCard(cardID: Card): Action[AnyContent] = Action.async {
 
     implicit request =>
-      employeeRepository.findEmployeeByID(card).flatMap {
+      employeeRepository.findEmployeeByID(cardID).flatMap {
         case Some(employee) =>
-          employeeSessionRepository.findEmployeeSessionByID(card).flatMap {
+          employeeSessionRepository.findEmployeeSessionByID(cardID).flatMap {
             case Some(_) =>
-              employeeSessionRepository.deleteEmployeeSessionByID(card).map(_ => Ok(s"Goodbye ${employee.name}."))
+              employeeSessionRepository.deleteEmployeeSessionByID(cardID).map(_ => Ok(s"Goodbye ${employee.name}."))
             case None =>
-             employeeSessionRepository.createEmployeeSessionByID(EmployeeSession(card.cardID, LocalDateTime.now))
+             employeeSessionRepository.createEmployeeSessionByID(EmployeeSession(cardID.cardID, LocalDateTime.now))
                 .map(_ => Ok(s"Welcome ${employee.name}."))
           }
         case None => Future.successful(BadRequest("Your cardID is not registered on the system. Please proceed to registering your card."))
@@ -67,9 +67,9 @@ class EmployeeController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def findEmployeeByID(card: Card): Action[AnyContent] = Action.async {
+  def findEmployeeByID(cardID: Card): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      employeeRepository.findEmployeeByID(card).map {
+      employeeRepository.findEmployeeByID(cardID).map {
         case None => NotFound("An Employee could not be found with that cardID.")
         case Some(employee) => Ok(Json.toJson(employee))
       } recoverWith {
@@ -80,10 +80,10 @@ class EmployeeController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def checkBalance(card: Card): Action[AnyContent] = Action.async {
+  def checkBalance(cardID: Card): Action[AnyContent] = Action.async {
     implicit request: Request[AnyContent] =>
-      employeeRepository.findEmployeeByID(card).map {
-        case Some(employee) => Ok(Json.toJson(employee.balance))
+      employeeRepository.findEmployeeByID(cardID).map {
+        case Some(employee) => Ok(Json.toJson(s"Your balance is £${employee.balance}.00."))
         case None => NotFound("An Employee could not be found with that cardID.")
       } recoverWith {
         case _: JsResultException =>
@@ -93,14 +93,14 @@ class EmployeeController @Inject()(cc: ControllerComponents,
       }
   }
 
-  def topUpBalance(card: Card, topUpAmount: Int): Action[AnyContent] = Action.async {
-    employeeRepository.findEmployeeByID(card).flatMap {
+  def topUpBalance(cardID: Card, topUpAmount: Int): Action[AnyContent] = Action.async {
+    employeeRepository.findEmployeeByID(cardID).flatMap {
       case Some(_) =>
         topUpAmount match {
           case x if x <= 0 => Future.successful(BadRequest("You must enter a positive amount to top up your balance."))
           case _ =>
-            employeeRepository.findEmployeeByID(card).flatMap {
-              case Some(_) => employeeRepository.topUpBalance(card, topUpAmount)
+            employeeRepository.findEmployeeByID(cardID).flatMap {
+              case Some(_) => employeeRepository.topUpBalance(cardID, topUpAmount)
                 .map { _ => Ok(s"Top up successful, £$topUpAmount has been added to your account balance.")}
             }
         }
@@ -111,15 +111,15 @@ class EmployeeController @Inject()(cc: ControllerComponents,
     }
   }
 
-  def accountTransaction(card: Card, costOfGoods: Int): Action[AnyContent] = Action.async {
-    employeeRepository.findEmployeeByID(card).flatMap {
+  def accountTransaction(cardID: Card, costOfGoods: Int): Action[AnyContent] = Action.async {
+    employeeRepository.findEmployeeByID(cardID).flatMap {
       case Some(employee) => {
         costOfGoods match {
           case x if x > employee.balance => Future.successful(BadRequest("Insufficient balance to complete this transaction."))
           case _ =>
-            employeeRepository.findEmployeeByID(card).flatMap {
+            employeeRepository.findEmployeeByID(cardID).flatMap {
               case Some(_) =>
-                employeeRepository.accountTransaction(card, costOfGoods).map {
+                employeeRepository.accountTransaction(cardID, costOfGoods).map {
                   case Some(_) => Ok("Your transaction was successful.")
                 }
             }

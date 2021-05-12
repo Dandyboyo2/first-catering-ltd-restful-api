@@ -30,13 +30,13 @@ case class EmployeeSessionRepository @Inject()(mongo: ReactiveMongoApi, config: 
 
   employeeSessionCollection.map(_.indexesManager.ensure(index))
   
-  def findEmployeeSessionByID(card: Card): Future[Option[EmployeeSession]] =
-    employeeSessionCollection.flatMap(_.find(Json.obj("cardID" -> card.cardID), None).one[EmployeeSession])
+  def findEmployeeSessionByID(cardID: Card): Future[Option[EmployeeSession]] =
+    employeeSessionCollection.flatMap(_.find(Json.obj("cardID" -> cardID.cardID), None).one[EmployeeSession])
 
   def createEmployeeSessionByID(session: EmployeeSession): Future[WriteResult] = {
     employeeSessionCollection.flatMap(_.insert.one(session))
   }
 
-  def deleteEmployeeSessionByID(card: Card): Future[WriteResult] =
-    employeeSessionCollection.flatMap(_.delete.one(Json.obj("cardID" -> card.cardID)))
+  def deleteEmployeeSessionByID(cardID: Card): Future[WriteResult] =
+    employeeSessionCollection.flatMap(_.delete.one(Json.obj("cardID" -> cardID.cardID)))
 }

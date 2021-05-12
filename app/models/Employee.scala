@@ -3,7 +3,7 @@ package models
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json.{Reads, OWrites, __}
 
-case class Employee(employeeID: Card,
+case class Employee(cardID: Card,
                     name: String,
                     email: String,
                     mobileNo: String,
